@@ -6,8 +6,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"path/filepath"
-	"runtime"
 )
 
 const (
@@ -34,19 +32,9 @@ func readFile(c interface{}, fileName string) (err error) {
 }
 
 func getPath() string {
-	var dir string
-	var err error
-	if len(os.Args) >= 2 {
-		dir, err = filepath.Abs(filepath.Dir(os.Args[1]))
-		if err != nil {
-			panic(fmt.Sprintf("Could not load given filepath: %v", err))
-		}
-	}
-
-	if dir == "" {
-		//load root folder
-		_, filename, _, _ := runtime.Caller(0)
-		dir = path.Dir(path.Join(filename, ".."))
+	dir, err := os.Getwd()
+	if err != nil {
+		panic(fmt.Sprintf("Could not load workdir: %v", err))
 	}
 	return dir
 }
