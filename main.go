@@ -10,12 +10,17 @@ import (
 	"runtime"
 )
 
-func Load(structure interface{}) {
-	err := readFile(structure, "../configs/config.json")
+const (
+	InitFile       = "setup.json"
+	AdditionalFile = "config.json"
+)
+
+func Load(configPath string, structure interface{}) {
+	err := readFile(structure, path.Join(configPath, InitFile))
 	if err != nil {
 		panic(fmt.Sprintf("Could not load initial configuration: %v", err))
 	}
-	readFile(structure, "../configs/config.json")
+	readFile(structure, path.Join(configPath, AdditionalFile))
 }
 
 func readFile(c interface{}, fileName string) (err error) {
